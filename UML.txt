@@ -1,0 +1,89 @@
++----------------+
+|   Client       |
++----------------+
+| - id           |
+| - nom          |
+| - prenom       |
+| - age          |
+| - permis       |
+| - historique   |
++----------------+
+
++----------------+
+|   Vehicule     |<<abstract>>
++----------------+
+| - id           |
+| - marque       |
+| - modele       |
+| - categorie    |
+| - tarif        |
+| - etat         |
+| - entretiens   |
++----------------+
+
+       ^             ^             ^
+       |             |             |
++------------+  +-----------+  +-----------+
+|   Moto     |  |  Voiture  |  |  Camion   |
++------------+  +-----------+  +-----------+
+| + age_req  |  | + age_req |  | + age_req |
++------------+  +-----------+  +-----------+
+
++------------------------+
+|       Location         |
++------------------------+
+| - id                   |
+| - dates                |
+| - cout                 |
+| - penalite             |
++------------------------+
+| - client : Client      |
+| - vehicule : Vehicule  |
++------------------------+
+
++---------------------------+
+|     SystemeLocation       |
++---------------------------+
+| - locations : Location[]  |
++---------------------------+
+| + verifier_disponibilite()|
+| + ajouter_location()      |
+| + supprimer_location()    |
+| + trouver_location()      |
++---------------------------+
+
++-----------------------------+
+|       SystemeGlobal         |
++-----------------------------+
+| - clients   : Client[]      |
+| - vehicules : Vehicule[]    |
+| - sys_location : SystemeLoc |
++-----------------------------+
+| + ajouter_chose()           |
+| + trouver_chose()           |
+| + supprimer_chose()         |
+| + calculer_gains()          |
+| + calculer_pertes()         |
+| + calculer_benef()          |
+| + calculer_statistiques()   |
+| + generer_rapports()        |
+| + ajouter_vehicule()        |
+| + afficher_vehicule(s)()    |
+| + retirer_vehicule()        |
+| + entretien_vehicule()      |
+| + ajouter_client()          |
+| + afficher_client(s)()      |
+| + retirer_client()          |
+| + ajouter_location()        |
+| + afficher_location(s)()    |
+| + retirer_location()        |
++-----------------------------+
+
+Relations (texte) :
+SystemeGlobal "1" --> "1" SystemeLocation         (agrégation)
+SystemeGlobal "1" --> "*" Client                  (agrégation)
+SystemeGlobal "1" --> "*" Vehicule                (agrégation)
+SystemeLocation "1" --> "*" Location              (composition)
+Location "1" --> "1" Client                       (association)
+Location "1" --> "1" Vehicule                     (association)
+Moto, Voiture, Camion --|> Vehicule               (héritage)

@@ -6,37 +6,48 @@ def chevauche(resa_exist: tuple[datetime, datetime], nouvelle: tuple[datetime, d
     return start1 < end2 and start2 < end1
 
 class Location:
-    def __init__(self, client, vehicule, dates, penalite=0):
+    def __init__(self, id, client, vehicule, dates, penalite=0)->None:
+        self.id = id
         self.client = client
         self.vehicule = vehicule
         self.dates = dates
-        self.cout = vehicule.tarif * (dates[0]-dates[1])
+        nb_jours = (dates[1] - dates[0]).days
+        self.cout = vehicule.tarif * nb_jours
         self.penalite = penalite
-    def __str__(self):
-        return f"Location: {self.client} a loué {self.vehicule} pour dates {self.dates} au prix de {cout}"
+    def __str__(self)->str:
+        return (
+            f"Location | Client: {self.client.id} | "
+            f"Véhicule: {self.vehicule.id} | "
+            f"Du {self.dates[0].date()} au {self.dates[1].date()} | "
+            f"Prix: {self.cout} €"
+        )
 
 class SystemeLocation():
-    def __init__(self, locations=[]):
+    def __init__(self, locations=[])->None:
         self.locations:[Location] = locations
-    def verifier_disponibilite(self, dates, vehicule):
+    def verifier_disponibilite(self, dates, vehicule)->bool:
         disponible = True
         for location in self.locations:
             if chevauche(location.dates, dates) and location.vehicule.id == vehicule.id: 
-                # Ce véhicule est déjà utilisé sur cette intervalle
                 disponible = False
                 break
         return disponible
-    def ajouter_location(self, client, vehicule, dates):
+    def ajouter_location(self, client, vehicule, dates)->bool:
         if client.age < vehicule.age_req: return False
-        if (self.verifier_disponibilite(dates, vehicule)): return False
+        if not self.verifier_disponibilite(dates, vehicule): return False
         else: 
-            self.locations.append(Location(client, vehicule, dates))
+            _id = len(self.locations)
+            self.locations.append(Location(_id, client, vehicule, dates))
             return True
-    def supprimer_location(self, client, vehicule, dates):
+    def supprimer_location(self, id)->bool:
         for i in range(len(self.location)):
-            location = self.location[i]
-            if location.client.id == location.client.id and location.dates == dates and location.vehicule.id == vehicule.id:
-                del self.location[i]
+            location = self.locations[i]
+            if location.id == id:
+                del self.locations[i]
                 return True
         return False
-    
+    def trouver_location(self, id)->None|Location:
+        for location in self.location:
+            if location.id == id:
+                return location
+        return None
