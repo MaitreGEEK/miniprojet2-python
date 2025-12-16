@@ -31,7 +31,7 @@ def menu() -> None:
         elif choix == "3":
             menu_locations()
         elif choix == "4":
-
+            print(location_sys.calculer_location())
             entree()
         elif choix == "5":
             print(location_sys.generer_rapports())

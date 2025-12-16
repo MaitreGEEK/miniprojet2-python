@@ -240,6 +240,25 @@ class SystemeGlobal:
         ok = self.sys_location.ajouter_location(client, vehicule, (d1, d2))
 
         return "✅ Location ajoutée" if ok else "❌ Location impossible"
+    def calculer_location(self) -> str: 
+        print("=== CALCUL D'UNE LOCATION ===")
+
+        vid = input("ID véhicule : ").strip()
+
+        vehicule = self.trouver_chose(vid, "vehicules")
+
+        if not vehicule:
+            return "❌ Véhicule introuvable"
+
+        try:
+            d1 = datetime.strptime(input("Date début (YYYY-MM-DD) : "), "%Y-%m-%d")
+            d2 = datetime.strptime(input("Date fin   (YYYY-MM-DD) : "), "%Y-%m-%d")
+        except ValueError:
+            return "❌ Date invalide"
+
+        if d1 >= d2:
+            return "❌ Intervalle de dates invalide"
+        return f"Prix de la location : {vehicule.tarif*(d2-d1).days} €"        
     def retirer_location(self) -> str:
         print("=== SUPPRIMER UNE LOCATION ===")
         loc_id = input("ID de la location : ").strip()
